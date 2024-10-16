@@ -2,6 +2,8 @@ library(tidymodels)
 library(doParallel)
 library(vroom)
 
+## KNN ##
+
 # Read in data
 train_data <- vroom('train.csv')
 test_data <- vroom('test.csv')

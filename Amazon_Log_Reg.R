@@ -1,6 +1,7 @@
 library(vroom)
 library(tidymodels)
 library(tidyverse)
+library(doParallel)
 
 ## Logistic Regression ##
 
@@ -16,11 +17,18 @@ train_data <- train_data %>%
 log_reg_recipe <- recipe(ACTION ~ ., data = train_data) %>% 
   step_mutate_at(all_predictors(), fn = factor) %>% 
   step_other(all_nominal_predictors(), threshold = .001, other = 'Other') %>% 
-  step_dummy(all_nominal_predictors())
+  step_dummy(all_nominal_predictors()) %>% 
+  step_normalize(all_predictors()) %>% 
+  step_pca(all_predictors(), threshold = .9)
 
 # Create logistic regression model
 log_reg_model <- logistic_reg() %>% 
   set_engine('glm')
+
+# Set up parallel computing
+num_cores <- detectCores()
+cl <- makePSOCKcluster(num_cores)
+registerDoParallel(num_cores)
 
 # Create workflow
 log_reg_wf <- workflow() %>% 
@@ -35,7 +43,11 @@ log_reg_preds <- predict(log_reg_wf,
   mutate(id = row_number(), ACTION = .pred_1) %>% 
   select(id, ACTION)
 
+# End parallel computing
+stopCluster(cl)
+
 # Write out the file
 vroom_write(x = log_reg_preds, file = "./Logistic_Reg.csv", delim = ",")
 
 # Score: 0.80913
+# Score with PCA: 0.79650

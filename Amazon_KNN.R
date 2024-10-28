@@ -17,7 +17,8 @@ knn_recipe <- recipe(ACTION ~ ., data = train_data) %>%
   step_mutate_at(all_predictors(), fn = factor) %>% 
   step_other(all_nominal_predictors(), threshold = .001, other = 'Other') %>% 
   step_lencode_mixed(all_nominal_predictors(), outcome = vars(ACTION)) %>% 
-  step_normalize(all_numeric_predictors())
+  step_normalize(all_numeric_predictors()) %>% 
+  step_pca(all_predictors(), threshold = .9)
 
 # Create knn model
 knn_model <- nearest_neighbor(neighbors = tune()) %>% 
@@ -70,3 +71,4 @@ stopCluster(cl)
 vroom_write(x = knn_preds, file = "./KNN.csv", delim = ",")
 
 # Score: 0.80913
+# Score with PCA: 0.80058

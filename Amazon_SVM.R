@@ -20,7 +20,8 @@ svm_recipe <- recipe(ACTION ~ ., data = train_data) %>%
   step_mutate_at(all_predictors(), fn = factor) %>% 
   step_other(all_nominal_predictors(), threshold = .001, other = 'Other') %>% 
   step_lencode_mixed(all_nominal_predictors(), outcome = vars(ACTION)) %>% 
-  step_normalize(all_numeric_predictors())
+  step_normalize(all_numeric_predictors()) %>% 
+  step_pca(all_predictors(), threshold = .9)
 
 # Create random forest model
 svm_model <- svm_rbf(rbf_sigma = tune(), 
@@ -42,9 +43,9 @@ svm_grid_params <- grid_regular(rbf_sigma(),
 folds <- vfold_cv(train_data, v = 10, repeats = 1)
 
 # Set up parallel computing
-num_cores <- detectCores()
-cl <- makePSOCKcluster(num_cores)
-registerDoParallel(num_cores)
+detectCores()
+cl <- makePSOCKcluster(10)
+registerDoParallel(10)
 
 # Run the cv
 cv_results <- svm_wf %>% 
@@ -75,4 +76,3 @@ stopCluster(cl)
 vroom_write(x = svm_preds, file = "./Support_Vector_Machine.csv", delim = ",")
 
 # Score:
-# Score with PCA:

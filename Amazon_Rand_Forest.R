@@ -78,4 +78,4 @@ stopCluster(cl)
 vroom_write(x = rand_forest_preds, file = "./Random_Forest.csv", delim = ",")
 
 # Score: 0.87473
-# Score: 0.84959
+# Score with PCA: 0.84959

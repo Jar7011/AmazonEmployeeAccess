@@ -75,4 +75,4 @@ stopCluster(cl)
 # Write out the file
 vroom_write(x = svm_preds, file = "./Support_Vector_Machine.csv", delim = ",")
 
-# Score:
+# Score with PCA: 0.77339

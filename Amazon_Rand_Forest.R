@@ -22,7 +22,7 @@ rand_forest_recipe <- recipe(ACTION ~ ., data = train_data) %>%
   step_other(all_nominal_predictors(), threshold = .001, other = 'Other') %>% 
   step_lencode_mixed(all_nominal_predictors(), outcome = vars(ACTION)) %>% 
   step_normalize(all_numeric_predictors()) %>% 
-  step_smote(all_outcomes(), neighbors = 4)
+  step_smote(all_outcomes(), neighbors = 3)
 
 # Create random forest model
 rand_forest_model <- rand_forest(mtry = tune(),
@@ -47,8 +47,8 @@ folds <- vfold_cv(train_data, v = 10, repeats = 1)
 
 # Set up parallel computing
 num_cores <- detectCores()
-cl <- makePSOCKcluster(num_cores)
-registerDoParallel(num_cores)
+cl <- makePSOCKcluster(10)
+registerDoParallel(10)
 
 # Run the cv
 cv_results <- rand_forest_wf %>% 

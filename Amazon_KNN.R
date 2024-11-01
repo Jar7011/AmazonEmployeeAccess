@@ -1,6 +1,7 @@
 library(tidymodels)
 library(doParallel)
 library(vroom)
+library(themis)
 
 ## KNN ##
 

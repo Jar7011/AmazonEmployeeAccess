@@ -2,6 +2,7 @@ library(tidymodels)
 library(embed)
 library(doParallel)
 library(vroom)
+library(themis)
 
 ## Penalized Logistic Regression ## 
 

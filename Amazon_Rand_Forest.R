@@ -4,6 +4,7 @@ library(tidymodels)
 library(vroom)
 library(doParallel)
 library(embed)
+library(themis)
 
 ## Random Forest Model ##
 

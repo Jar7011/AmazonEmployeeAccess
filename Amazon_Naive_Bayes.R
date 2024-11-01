@@ -5,6 +5,7 @@ library(vroom)
 library(doParallel)
 library(embed)
 library(discrim)
+library(themis)
 
 ## Naive Bayes Model ##
 

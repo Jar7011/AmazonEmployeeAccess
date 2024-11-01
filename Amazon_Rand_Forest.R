@@ -20,8 +20,8 @@ rand_forest_recipe <- recipe(ACTION ~ ., data = train_data) %>%
   step_mutate_at(all_predictors(), fn = factor) %>% 
   step_other(all_nominal_predictors(), threshold = .001, other = 'Other') %>% 
   step_lencode_mixed(all_nominal_predictors(), outcome = vars(ACTION)) %>% 
-  step_normalize(all_numeric_predictors())%>% 
-  step_pca(all_predictors(), threshold = .9)
+  step_normalize(all_numeric_predictors()) %>% 
+  step_smote(all_outcomes(), neighbors = 4)
 
 # Create random forest model
 rand_forest_model <- rand_forest(mtry = tune(),
@@ -79,3 +79,4 @@ vroom_write(x = rand_forest_preds, file = "./Random_Forest.csv", delim = ",")
 
 # Score: 0.87473
 # Score with PCA: 0.84959
+# Score with SMOTE algorithm: 

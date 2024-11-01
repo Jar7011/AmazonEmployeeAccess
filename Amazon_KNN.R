@@ -18,7 +18,7 @@ knn_recipe <- recipe(ACTION ~ ., data = train_data) %>%
   step_other(all_nominal_predictors(), threshold = .001, other = 'Other') %>% 
   step_lencode_mixed(all_nominal_predictors(), outcome = vars(ACTION)) %>% 
   step_normalize(all_numeric_predictors()) %>% 
-  step_pca(all_predictors(), threshold = .9)
+  step_smote(all_outcomes(), neighbors = 4)
 
 # Create knn model
 knn_model <- nearest_neighbor(neighbors = tune()) %>% 
@@ -72,3 +72,4 @@ vroom_write(x = knn_preds, file = "./KNN.csv", delim = ",")
 
 # Score: 0.80913
 # Score with PCA: 0.80058
+# Score with SMOTE algorithm: 0.80224

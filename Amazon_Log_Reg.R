@@ -2,6 +2,7 @@ library(vroom)
 library(tidymodels)
 library(tidyverse)
 library(doParallel)
+library(themis)
 
 ## Logistic Regression ##
 
@@ -19,7 +20,7 @@ log_reg_recipe <- recipe(ACTION ~ ., data = train_data) %>%
   step_other(all_nominal_predictors(), threshold = .001, other = 'Other') %>% 
   step_dummy(all_nominal_predictors()) %>% 
   step_normalize(all_predictors()) %>% 
-  step_pca(all_predictors(), threshold = .9)
+  step_smote(all_outcomes(), neighbors = 4)
 
 # Create logistic regression model
 log_reg_model <- logistic_reg() %>% 
@@ -51,3 +52,4 @@ vroom_write(x = log_reg_preds, file = "./Logistic_Reg.csv", delim = ",")
 
 # Score: 0.80913
 # Score with PCA: 0.79650
+# Score with SMOTE algorithm: 0.80214

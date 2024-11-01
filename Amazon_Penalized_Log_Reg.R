@@ -19,7 +19,7 @@ penalized_log_reg_recipe <- recipe(ACTION ~ ., data = train_data) %>%
   step_other(all_nominal_predictors(), threshold = .001, other = 'Other') %>% 
   step_lencode_mixed(all_nominal_predictors(), outcome = vars(ACTION)) %>% 
   step_normalize(all_numeric_predictors()) %>% 
-  step_pca(all_predictors(), threshold = .9)
+  step_smote(all_outcomes(), neighbors = 4)
 
 # Create model
 penalized_log_reg_model <- logistic_reg(mixture = tune(),
@@ -74,3 +74,4 @@ vroom_write(x = log_reg_preds, file = "./Penalized_Log_Reg.csv", delim = ",")
 
 # Score: 0.78337
 # Score with PCA: 0.77701
+# Score with SMOTE algorithm: 0.78343

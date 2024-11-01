@@ -22,7 +22,8 @@ nb_recipe <- recipe(ACTION ~ ., data = train_data) %>%
   step_other(all_nominal_predictors(), threshold = .001, other = 'Other') %>% 
   step_lencode_mixed(all_nominal_predictors(), outcome = vars(ACTION)) %>% 
   step_normalize(all_numeric_predictors()) %>% 
-  step_pca(all_predictors(), threshold = .9)
+  step_pca(all_predictors(), threshold = .9) %>% 
+  step_smote(all_outcomes(), neighbors = 4)
 
 # Create random forest model
 nb_model <- naive_Bayes(Laplace = tune(), smoothness = tune()) %>% 
@@ -77,3 +78,4 @@ vroom_write(x = nb_preds, file = "./Naive_Bayes.csv", delim = ",")
 
 # Score: 0.75864
 # Score with PCA: 0.77766
+# Score with SMOTE algorithm: 0.78223

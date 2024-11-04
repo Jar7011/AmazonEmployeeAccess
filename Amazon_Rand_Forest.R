@@ -39,7 +39,7 @@ rand_forest_wf <- workflow() %>%
 prep(rand_forest_recipe) %>% bake(train_data) %>% ncol() # = 10
 rand_forest_grid_params <- grid_regular(mtry(range = c(1, 10)),
                                         min_n(),
-                                        levels = 5)
+                                        levels = 10)
 
 # Split data for cross validation
 folds <- vfold_cv(train_data, v = 10, repeats = 1)
